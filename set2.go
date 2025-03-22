@@ -2,7 +2,8 @@
 package main
 
 import (
-"fmt"
+	"fmt"
+	"strings"
 )
 
 func main() {
@@ -197,9 +198,29 @@ func shiftByLetter(letter string, letterShift string) string {
 // Returns:
 // - the message, shifted appropriately
 func vigenereCipher(message string, key string) string {
-	// Replace this with your code
-	return ""
+        lenOfMessage := len(message)
+        keyLen := len(key)
+        encrypt := make([]byte, lenOfMessage)
+        keyIndex := 0
+
+        for i := 0; i < lenOfMessage; i++ {
+                char := message[i]
+                if char >= 'A' && char <= 'Z' {
+                        shift := key[keyIndex%keyLen] - 'A'
+                        encrypt[i] = (char-'A'+shift)%26 + 'A'
+                        keyIndex++
+                } else {
+                        encrypt[i] = char
+                }
+        }
+
+        return string(encrypt)
 }
+//for test runs 
+//func main() {
+        //myMessage := vigenereCipher("AMIGA MNL", "KEY")
+        //fmt.Println("Cipher: ", myMessage
+//}
 
 // Scytale cipher
 //
@@ -248,9 +269,28 @@ func vigenereCipher(message string, key string) string {
 // Returns:
 // - the message, encoded appropriately.
 func scytaleCipher(message string, shift int) string {
-	// Replace this with your code
-	return ""
+        lenOfMessage := len(message)
+
+        if lenOfMessage%shift != 0 {
+                padding := shift - (lenOfMessage % shift)
+                for i := 0; i < padding; i++ {
+                        message += "_"
+                }
+                lenOfMessage= len(message)
+        }
+
+        encodedMessage := make([]byte, lenOfMessage)
+        for i := 0; i < lenOfMessage; i++ {
+                encodedMessage[i] = message[(i/shift)+(lenOfMessage/shift)*(i%shift)]
+        }
+
+        return string(encodedMessage)
 }
+//for test runs
+	//func main() {
+       // scytaleCipher("INFORMATION_AGE", 3)
+        //fmt.Println("Encoded Message: ",scytaleCipher)
+//}
 
 // Scytale decipher
 //
@@ -268,6 +308,18 @@ func scytaleCipher(message string, shift int) string {
 // Returns:
 // - The message, decoded appropriately.
 func scytaleDecipher(message string, shift int) string {
-	// Replace this with your code
-	return ""
+        lenOfMessage := len(message)
+        rows := lenOfMessage / shift
+
+        decodedMessage := make([]byte, lenOfMessage)
+        for i := 0; i < lenOfMessage; i++ {
+                decodedMessage[(i%rows)*shift+(i/rows)] = message[i]
+        }
+
+        return string(decodedMessage)
 }
+//for test runs
+	//func main() {
+        //myMessage := scytaleDecipher("IMNNA_FTAOIGROE", 3)
+        //fmt.Println("Decoded Message: ",myMessage)
+//}
