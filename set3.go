@@ -64,7 +64,7 @@ func relationshipStatus(fromMember string, toMember string, socialGraph map[stri
 	if contains(toFollowing, fromMember) {
 		return "followed by"
 	}
-
+	
 	return "no relationship"
 }
 
@@ -87,52 +87,52 @@ func relationshipStatus(fromMember string, toMember string, socialGraph map[stri
 func ticTacToe(board [][]string) string {
 	size := len(board)
 
-	check := func(line []string) string {
+    check := func(line []string) string {
 		if len(line) > 0 && line[0] != "" {
-			win := true
-			for _, cell := range line {
-				if cell != line[0] {
-					win = false
-					break
-				}
-			}
-			if win {
-				return line[0]
-			}
-		}
-		return ""
-	}
+            win := true
+            for _, cell := range line {
+                if cell != line[0] {
+                    win = false
+                    break
+                }
+            }
+            if win {
+                return line[0]
+            }
+        }
+        return ""
+    }
+  
+    for _, row := range board {
+        if winner := check(row); winner != "" {
+            return winner
+        }
+    }
+  
+    for col := 0; col < size; col++ {
+        column := make([]string, size)
+        for row := 0; row < size; row++ {
+            column[row] = board[row][col]
+        }
+        if winner := check(column); winner != "" {
+            return winner
+        }
+    }
 
-	for _, row := range board {
-		if winner := check(row); winner != "" {
-			return winner
-		}
-	}
+    diag1 := make([]string, size)
+    diag2 := make([]string, size)
+    for i := 0; i < size; i++ {
+        diag1[i] = board[i][i]
+        diag2[i] = board[i][size-1-i]
+    }
+    if winner := check(diag1); winner != "" {
+        return winner
+    }
+    if winner := check(diag2); winner != "" {
+        return winner
+    }
 
-	for col := 0; col < size; col++ {
-		column := make([]string, size)
-		for row := 0; row < size; row++ {
-			column[row] = board[row][col]
-		}
-		if winner := check(column); winner != "" {
-			return winner
-		}
-	}
-
-	diag1 := make([]string, size)
-	diag2 := make([]string, size)
-	for i := 0; i < size; i++ {
-		diag1[i] = board[i][i]
-		diag2[i] = board[i][size-1-i]
-	}
-	if winner := check(diag1); winner != "" {
-		return winner
-	}
-	if winner := check(diag2); winner != "" {
-		return winner
-	}
-
-	return "NO WINNER"
+    return "NO WINNER"
 }
 
 // ETA
@@ -157,15 +157,15 @@ func eta(firstStop string, secondStop string, routeMap map[string]map[string]int
 	if firstStop == secondStop {
 		return 0
 	}
-
+	
 	visited := make(map[string]bool)
 	time := 0
 	current := firstStop
-
+	
 	for {
 		visited[current] = true
 		found := false
-
+	
 		for route, data := range routeMap {
 			stops := strings.Split(route, ",")
 			if stops[0] == current {
@@ -176,11 +176,11 @@ func eta(firstStop string, secondStop string, routeMap map[string]map[string]int
 					return time
 				}
 				break
+				}
+			}
+	
+			if !found || visited[current] {
+				return -1
 			}
 		}
-
-		if !found || visited[current] {
-			return -1
-		}
-	}
-}
+	}	
